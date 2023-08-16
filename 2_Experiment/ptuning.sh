@@ -6,7 +6,7 @@ PRE_SEQ_LEN=128 && LR=2e-2 && CUDA_VISIBLE_DEVICES=0 python3 main.py \
     --response_column summary \
     --overwrite_cache \
     --model_name_or_path /home/project-1/checkpoints/chatglm-6b \
-    --output_dir /home/project-1/baoziyuan/ChatGLM-RPC-Tutorial/1_Local_Training/output/adgen-chatglm-6b-pt-$PRE_SEQ_LEN-$LR \
+    --output_dir /home/project-1/baoziyuan/ChatGLM-RPC-Tutorial/2_Experiment/output/adgen-chatglm-6b-pt-$PRE_SEQ_LEN-$LR \
     --overwrite_output_dir \
     --max_source_length 64 \
     --max_target_length 64 \
@@ -14,7 +14,7 @@ PRE_SEQ_LEN=128 && LR=2e-2 && CUDA_VISIBLE_DEVICES=0 python3 main.py \
     --per_device_eval_batch_size 1 \
     --gradient_accumulation_steps 4 \
     --predict_with_generate \
-    --max_steps 3000 \
+    --max_steps 1000 \
     --logging_steps 10 \
     --save_steps 1000 \
     --learning_rate $LR \
