@@ -15,7 +15,7 @@ bash ds_train_finetune.sh
 
 # If you are using Ptuning v2
 
-## Set up the path in
+## Set up the path in ptuning.sh
 
 ```bash
   --train_file /path/to/the/train/file \
