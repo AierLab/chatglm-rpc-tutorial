@@ -30,21 +30,20 @@ Based on Tutorial 1, this tutorial further implements the necessary functions ne
 ## Prerequisites
 
 - Python
+- transformers = 4.27.1
 - PyTorch
 - PyTorch RPC
 - DeepSpeed
 
-## Installation
-
 ```bash
-# Clone this repository
-git clone https://github.com/yourusername/split-learning-chatglm.git
+# Install depenences
+pip install rouge_chinese nltk jieba datasets -i https://mirror.sjtu.edu.cn/pypi/web/simple
 
-# Navigate to the cloned directory
-cd split-learning-chatglm
+# Install Adgen dataset
+wget -O AdvertiseGen.tar.gz https://cloud.tsinghua.edu.cn/f/b3f119a008264b1cabd1/?dl=1
 
-# Install the required packages
-pip install -r requirements.txt
+# Unzip the dataset
+tar -xzvf AdvertiseGen.tar.gz
 ```
 
 ## TODO
