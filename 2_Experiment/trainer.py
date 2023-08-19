@@ -32,7 +32,7 @@ from collections.abc import Mapping
 from distutils.util import strtobool
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Tuple, Union
-
+from utility import freeze_layers, dynamic_freeze
 from tqdm.auto import tqdm
 
 
@@ -1838,7 +1838,12 @@ class Trainer:
                     _ = list(train_dataloader.sampler)
 
         total_batched_samples = 0
+        
         for epoch in range(epochs_trained, num_train_epochs):
+            
+            # Dynamic freezing layers. Freeze layers 10-13 after 5 epochs
+            dynamic_freeze(model, args.dynamic_freeze, epoch)
+            
             if isinstance(train_dataloader, DataLoader) and isinstance(train_dataloader.sampler, DistributedSampler):
                 train_dataloader.sampler.set_epoch(epoch)
             elif hasattr(train_dataloader, "dataset") and isinstance(train_dataloader.dataset, IterableDatasetShard):

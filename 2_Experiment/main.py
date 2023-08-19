@@ -29,6 +29,7 @@ import jieba
 from rouge_chinese import Rouge
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 import torch
+from functools import partial
 
 import transformers
 from transformers import (
@@ -41,7 +42,7 @@ from transformers import (
     set_seed,
 )
 from trainer_seq2seq import Seq2SeqTrainer
-
+from utility import freeze_layers, register_hooks
 from arguments import ModelArguments, DataTrainingArguments
 
 logger = logging.getLogger(__name__)
@@ -57,6 +58,10 @@ def main():
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
     training_args.local_rank = -1
+    training_args.layers_to_freeze = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    training_args.dynamic_freeze = {5: [10, 11, 12], 
+                                    10: [13, 14, 15]}
+    training_args.hook_layers = [4, 10, 27]
     
     # Setup logging
     logging.basicConfig(
@@ -348,10 +353,14 @@ def main():
         data_args.num_beams if data_args.num_beams is not None else training_args.generation_num_beams
     )
     
-    # Freeze 0-27 GLMBlock of the model
-    for block in model.transformer.layers:
-        for param in block.parameters():
-            param.requires_grad = False
+    #freeze layers
+    freeze_layers(model, training_args.layers_to_freeze)
+    
+    # Register hooks
+    register_hooks(model, training_args.hook_layers)
+
+    # hook_function = partial(save_input_output, model)
+    # handle = model.transformer.layers[0].register_forward_hook(hook_function)
     
     # Initialize our Trainer
     trainer = Seq2SeqTrainer(
